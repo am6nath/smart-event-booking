@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════
+   🌿 EVENTHUB — FOREST GREEN × PAPER DESIGN SYSTEM
+   CSS custom properties for non-Tailwind usages
+═══════════════════════════════════════════════════════ */
+:root {
+  --paper-bg:       #FAF7F0;
+  --paper-dark:     #F2EDD8;
+  --paper-edge:     #D4CBAF;
+  --forest-900:     #1A2E17;
+  --forest-800:     #243D1F;
+  --forest-700:     #2D5A27;
+  --forest-600:     #3D7134;
+  --forest-500:     #4E8F43;
+  --forest-100:     #D8EBD5;
+  --forest-50:      #EDF5EB;
+  --ink-900:        #1A1A12;
+  --ink-700:        #3A3A28;
+  --ink-500:        #6B6B52;
+  --ink-300:        #A3A38A;
+  --shadow-paper:   4px 4px 0px rgba(45,90,39,0.12);
+  --shadow-press:   2px 2px 0px rgba(45,90,39,0.2);
+}
+
+/* ═══════════════════════════════════════════════════════
+   BASE LAYER — Paper background, ink text, luxury serif
+═══════════════════════════════════════════════════════ */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--paper-bg);
+    color: var(--ink-900);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(180,165,130,0.04) 28px,
+        rgba(180,165,130,0.04) 29px
+      );
+  }
+
+  /* Luxury Display Treatment using Bodoni Moda */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bodoni Moda', Georgia, serif;
+    color: var(--ink-900);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background-color: rgba(45, 90, 39, 0.2);
+    color: var(--ink-900);
+  }
+
+  ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track  { background: var(--paper-dark); }
+  ::-webkit-scrollbar-thumb  { background: var(--forest-500); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--forest-700); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   COMPONENT LAYER — Reusable paper/forest components
+   Explicit variables used to avoid Vite PostCSS HMR bugs
+═══════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── Paper Card */
+  .paper-card {
+    background-color: var(--paper-bg);
+    border: 1px solid var(--paper-edge);
+    box-shadow: var(--shadow-paper);
+    @apply transition-all duration-300;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 27px,
+      rgba(180,165,130,0.05) 27px, rgba(180,165,130,0.05) 28px
+    );
+  }
+
+  .paper-card:hover {
+    box-shadow: 6px 6px 0px rgba(45,90,39,0.15);
+    @apply -translate-y-0.5;
+  }
+
+  /* ── Forest Button (primary) */
+  .btn-forest {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
+           font-sans font-semibold text-sm uppercase tracking-widest
+           transition-all duration-200 cursor-pointer
+           select-none;
+    background-color: var(--forest-700);
+    color: var(--forest-50);
+    border: 2px solid var(--forest-700);
+    box-shadow: var(--shadow-paper);
+  }
+
+  .btn-forest:hover:not(:disabled) {
+    background-color: var(--forest-800);
+    border-color: var(--forest-800);
+    box-shadow: var(--shadow-press);
+    transform: translate(1px, 1px);
+  }
+
+  .btn-forest:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+  }
+
+  .btn-forest:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* ── Outline Button */
+  .btn-outline-forest {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-transparent
+           font-sans font-semibold text-sm uppercase tracking-widest
+           transition-all duration-200 cursor-pointer select-none;
+    color: var(--forest-700);
+    border: 2px solid var(--forest-700);
+    box-shadow: var(--shadow-paper);
+  }
+
+  .btn-outline-forest:hover:not(:disabled) {
+    background-color: var(--forest-50);
+    transform: translate(1px, 1px);
+    box-shadow: var(--shadow-press);
+  }
+
+  .btn-outline-forest:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* ── Ghost Button */
+  .btn-ghost-forest {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           bg-transparent
+           font-sans font-semibold text-xs uppercase tracking-widest
+           transition-all duration-200 cursor-pointer;
+    color: var(--forest-700);
+    border: 1px solid var(--forest-100);
+  }
+  .btn-ghost-forest:hover {
+    background-color: var(--forest-50);
+    border-color: var(--forest-500);
+  }
+
+  /* ── Paper Input */
+  .input-paper {
+    @apply w-full px-4 py-3 bg-transparent font-sans text-sm outline-none transition-all duration-200;
+    border-bottom: 2px solid var(--paper-edge);
+    color: var(--ink-900);
+  }
+
+  .input-paper:focus {
+    border-color: var(--forest-600);
+    background-color: white;
+  }
+
+  /* ── Paper Input (bordered variant) */
+  .input-paper-box {
+    @apply w-full px-4 py-3 bg-transparent font-sans text-sm outline-none transition-all duration-200;
+    border: 2px solid var(--paper-edge);
+    color: var(--ink-900);
+  }
+
+  .input-paper-box:focus {
+    border-color: var(--forest-600);
+    background-color: white;
+  }
+
+  /* ── Status Badges */
+  .badge-forest   { @apply inline-flex items-center px-3 py-0.5 text-xs font-bold uppercase tracking-wider; background: var(--forest-100); color: var(--forest-700); border: 1px solid var(--forest-500); }
+  .badge-pending  { @apply inline-flex items-center px-3 py-0.5 text-xs font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200; }
+  .badge-danger   { @apply inline-flex items-center px-3 py-0.5 text-xs font-bold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200; }
+  .badge-paper    { @apply inline-flex items-center px-3 py-0.5 text-xs font-bold uppercase tracking-wider; background: transparent; color: var(--ink-500); border: 1px solid var(--paper-edge); }
+  .badge-blue     { @apply inline-flex items-center px-3 py-0.5 text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200; }
+
+  /* ── Section Divider — stamp-style line */
+  .divider-leaf {
+    @apply flex items-center gap-4 my-8;
+  }
+  .divider-leaf::before, .divider-leaf::after {
+    content: '';
+    @apply flex-1 border-t-2 border-dashed;
+    border-color: var(--paper-edge);
+  }
+
+  /* ── Ticket stub decoration */
+  .ticket-stub {
+    background-color: var(--paper-bg);
+    @apply relative border-2;
+    border-color: var(--forest-700);
+  }
+
+  .ticket-stub::before {
+    content: '';
+    @apply absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2;
+    background-color: var(--paper-bg);
+    border-color: var(--forest-700);
+  }
+
+  .ticket-stub::after {
+    content: '';
+    @apply absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2;
+    background-color: var(--paper-bg);
+    border-color: var(--forest-700);
+  }
+
+  /* ── Corner fold accent */
+  .paper-corner {
+    @apply relative;
+  }
+  .paper-corner::before, .paper-corner::after {
+    content: '';
+    @apply absolute w-4 h-4 border-2;
+  }
+  .paper-corner::before {
+    @apply top-0 left-0 border-b-0 border-r-0;
+    border-color: var(--forest-600);
+  }
+  .paper-corner::after {
+    @apply bottom-0 right-0 border-t-0 border-l-0;
+    border-color: var(--forest-600);
+  }
+
+  /* ── Page section label */
+  .section-label {
+    @apply text-[9px] font-black uppercase tracking-[0.5em];
+    color: var(--forest-600);
+  }
+
+  /* ── Table */
+  .paper-table {
+    @apply w-full text-sm border-collapse;
+  }
+  .paper-table thead tr {
+    @apply border-b-2;
+    border-color: var(--forest-700);
+  }
+  .paper-table thead th {
+    @apply py-3 px-4 text-left text-[10px] font-black uppercase tracking-wider;
+    color: var(--ink-500);
+  }
+  .paper-table tbody tr {
+    @apply border-b transition-colors;
+    border-color: var(--paper-edge);
+  }
+  .paper-table tbody tr:hover {
+    background-color: var(--forest-50);
+  }
+  .paper-table tbody td {
+    @apply py-3 px-4;
+    color: var(--ink-700);
+  }
+
+  /* ── Loading shimmer */
+  .shimmer {
+    @apply animate-pulse;
+    background-color: var(--paper-dark);
+  }
+
+  /* ── Page wrapper */
+  .page-wrapper {
+    background-color: var(--paper-bg);
+    color: var(--ink-900);
+    @apply min-h-screen font-sans;
+  }
+
+  /* ── Container */
+  .container-paper {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Animate in */
+  .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+  .animate-slideUp { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+}
