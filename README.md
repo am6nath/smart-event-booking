@@ -49,9 +49,9 @@ Start the backend and frontend (see [Getting Started](#-getting-started)), then 
 
 | Role | Email | Password |
 |---|---|---|
-| **Admin** | `admin@eventhub.com` | `admin123` |
-| **Organizer** | `organizer@eventhub.com` | `org123` |
-| **User** | `user@eventhub.com` | `user123` |
+| **Admin** | `admin@eventbooking.com` | `Admin123` |
+| **Organizer** | `organizer@eventbooking.com` | `org123` |
+| **User** | `amar@event.com` | `Amar123` |
 
 > Run `node seed.js` inside the `backend/` directory to populate the database with these accounts and sample events.
 
