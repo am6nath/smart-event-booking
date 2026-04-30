@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import api from '../../services/axios';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const OrganizerProfile = () => {
   const { id } = useParams();

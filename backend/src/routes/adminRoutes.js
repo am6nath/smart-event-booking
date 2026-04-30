@@ -170,12 +170,20 @@ router.put(
 // @route   PUT /api/admin/events/:eventId/approve-update
 // @desc    Approve or reject an event update request from an organizer
 // @access  Admin only
+const approveUpdateValidation = [
+  body('action')
+    .notEmpty()
+    .withMessage('Action is required')
+    .isIn(['approve', 'reject'])
+    .withMessage('Action must be "approve" or "reject"')
+];
+
 router.put(
   '/events/:eventId/approve-update',
   verifyToken,
   authorize('admin'),
   mongoIdParam('eventId'),
-  approveEventValidation,
+  approveUpdateValidation,
   approveEventUpdate
 );
 

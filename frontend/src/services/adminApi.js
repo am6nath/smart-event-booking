@@ -15,9 +15,10 @@ const adminApi = {
   deleteUser:     (id)         => api.delete(`/admin/users/${id}`),
 
   // Events
-  getAllEvents:  (params = {}) => api.get('/admin/events', { params }),
-  approveEvent: (id, data)    => api.put(`/admin/events/${id}/approve`, data),
-  deleteEvent:  (id)          => api.delete(`/admin/events/${id}`),
+  getAllEvents:       (params = {}) => api.get('/admin/events', { params }),
+  approveEvent:      (id, data)    => api.put(`/admin/events/${id}/approve`, data),
+  approveEventUpdate:(id, data)    => api.put(`/admin/events/${id}/approve-update`, data),
+  deleteEvent:       (id)          => api.delete(`/admin/events/${id}`),
 
   // Bookings
   getAllBookings: (params = {}) => api.get('/admin/bookings', { params }),

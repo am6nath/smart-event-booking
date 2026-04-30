@@ -98,14 +98,19 @@ bookingSchema.statics.countConfirmedByEvent = function(eventId) {
 
 // ============ INSTANCE METHODS ============
 bookingSchema.methods.cancel = async function() {
+  // ✅ Guard: prevent double cancellation
+  if (this.status === 'cancelled') {
+    throw new Error('Booking is already cancelled');
+  }
   this.status = 'cancelled';
   await this.save();
-  
-  // Return seats to event
-  await mongoose.model('Event').findByIdAndUpdate(this.eventId, {
-    $inc: { availableSeats: this.quantity }
-  });
-  
+
+  // ✅ Restore seats atomically
+  await mongoose.model('Event').findByIdAndUpdate(
+    this.eventId,
+    { $inc: { availableSeats: this.quantity } },
+    { new: true }
+  );
   return this;
 };
 

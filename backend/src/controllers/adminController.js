@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Event = require('../models/Event');
 const Booking = require('../models/Booking');
+const Review = require('../models/Review');
 
 // ═══════════════════════════════════════════════
 // 📊 DASHBOARD STATS
@@ -332,7 +333,11 @@ exports.deleteUser = async (req, res) => {
     await Booking.deleteMany({ eventId: { $in: eventIds } }); // Bookings for user's events
     await Booking.deleteMany({ userId: user._id });            // User's own bookings
     await Event.deleteMany({ organizerId: user._id });         // User's events
-    await user.deleteOne();                                     // User record
+
+    await Review.deleteMany({ eventId: { $in: eventIds } }); // Reviews for user's events
+    await Review.deleteMany({ userId: user._id });            // Reviews written by user
+    await Review.deleteMany({ organizerId: user._id });       // Reviews received by user as organizer
+    await user.deleteOne();                                   // User record
 
     res.status(200).json({
       success: true,

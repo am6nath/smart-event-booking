@@ -3,47 +3,33 @@ const Event   = require('../models/Event')
 const Booking = require('../models/Booking')
 const { validationResult } = require('express-validator')
 
-
 // ═══════════════════════════════════════════════
 // 👤 GET ORGANIZER PROFILE
 // @route   GET /api/organizers/:id
-// @desc    Get organizer profile with stats & events
 // @access  Public
 // ═══════════════════════════════════════════════
 exports.getOrganizerProfile = async (req, res) => {
   try {
-    // ✅ Fix 1: Check validation errors from mongoIdParam
     const errors = validationResult(req)
     if (!errors.isEmpty())
       return res.status(400).json({ success: false, errors: errors.array() })
 
+    // ✅ Fixed: include avgRating + reviewCount for frontend display
     const organizer = await User.findById(req.params.id)
-      .select('name email createdAt role')
+      .select('name email createdAt role avgRating reviewCount')
 
-    // ✅ Fix 2: Handle non-existent user AND wrong role
     if (!organizer)
-      return res.status(404).json({
-        success: false,
-        message: 'User not found.'
-      })
+      return res.status(404).json({ success: false, message: 'User not found.' })
 
     if (organizer.role !== 'organizer')
-      return res.status(404).json({
-        success: false,
-        message: 'Organizer not found.'
-      })
+      return res.status(404).json({ success: false, message: 'Organizer not found.' })
 
-    // ✅ Fix 3: Only show APPROVED events to public
-    // Include imageUrl + ticketPrice for frontend display
+    // Role-aware event visibility
     const eventsQuery = { organizerId: organizer._id }
-
-    // If optionalAuth provided a logged-in user who is
-    // admin → show all events; otherwise only approved
     if (!req.user || req.user.role === 'user') {
       eventsQuery.status = 'approved'
     }
 
-    // ✅ Fix 4: Added pagination for large event lists
     const page  = parseInt(req.query.page)  || 1
     const limit = parseInt(req.query.limit) || 10
     const skip  = (page - 1) * limit
@@ -51,31 +37,24 @@ exports.getOrganizerProfile = async (req, res) => {
     const totalEventCount = await Event.countDocuments(eventsQuery)
 
     const events = await Event.find(eventsQuery)
-      .select(
-        'title date location status availableSeats totalSeats ticketPrice imageUrl category'
-      )  // ✅ Fix 5: Added ticketPrice, imageUrl, category
+      .select('title date location status availableSeats totalSeats ticketPrice imageUrl category')
       .sort({ date: 1 })
       .skip(skip)
       .limit(limit)
 
-    // ── Stats (always across ALL approved events) ──
+    // Stats across ALL approved events
     const allApprovedEvents = await Event.find({
       organizerId: organizer._id,
       status: 'approved'
     }).select('_id')
 
-    const approvedCount = allApprovedEvents.length
-
+    const approvedCount  = allApprovedEvents.length
     const totalAttendees = await Booking.countDocuments({
       eventId: { $in: allApprovedEvents.map(e => e._id) },
       status: 'confirmed'
     })
+    const totalEventsAll = await Event.countDocuments({ organizerId: organizer._id })
 
-    const totalEventsAll = await Event.countDocuments({
-      organizerId: organizer._id
-    })
-
-    // ✅ Fix 6: Improved trust score logic
     const trustScore =
       approvedCount >= 10 ? 'Top Organizer' :
       approvedCount >= 5  ? 'Verified'      :
@@ -90,6 +69,9 @@ exports.getOrganizerProfile = async (req, res) => {
           name:        organizer.name,
           email:       organizer.email,
           memberSince: organizer.createdAt,
+          // ✅ Fixed: expose rating fields
+          avgRating:   organizer.avgRating   || 0,
+          reviewCount: organizer.reviewCount || 0,
           trustScore
         },
         stats: {
@@ -98,7 +80,6 @@ exports.getOrganizerProfile = async (req, res) => {
           totalAttendees
         },
         events,
-        // ✅ Fix 7: Pagination metadata
         pagination: {
           total: totalEventCount,
           page,
@@ -119,41 +100,35 @@ exports.getOrganizerProfile = async (req, res) => {
 // ═══════════════════════════════════════════════
 // 📋 GET ALL ATTENDEES FOR ORGANIZER'S EVENTS
 // @route   GET /api/organizers/my/attendees
-// @desc    Organizer sees who booked their events (read-only)
 // @access  Organizer | Admin
 // ═══════════════════════════════════════════════
 exports.getMyAttendees = async (req, res) => {
   try {
     const organizerId = req.user.id
 
-    // 1️⃣  Get all event IDs belonging to this organizer
     const myEvents = await Event.find({ organizerId })
       .select('_id title date location status')
       .lean()
 
     if (!myEvents.length) {
       return res.status(200).json({
-        success: true,
-        count: 0,
+        success:   true,
+        count:     0,
         attendees: [],
-        events: []
+        events:    [],
+        pagination: { total: 0, page: 1, pages: 0, limit: 20 }
       })
     }
 
     const eventIds = myEvents.map(e => e._id)
-
-    // 2️⃣  Optional filters from query string
     const { eventId, status, search } = req.query
 
     const query = { eventId: { $in: eventIds } }
-    if (eventId && eventIds.map(String).includes(eventId)) {
+    if (eventId && eventIds.map(String).includes(eventId))
       query.eventId = eventId
-    }
-    if (status && ['confirmed', 'cancelled'].includes(status)) {
+    if (status && ['confirmed', 'cancelled'].includes(status))
       query.status = status
-    }
 
-    // 3️⃣  Pagination
     const page  = Math.max(parseInt(req.query.page)  || 1, 1)
     const limit = Math.min(parseInt(req.query.limit) || 20, 100)
     const skip  = (page - 1) * limit
@@ -161,32 +136,32 @@ exports.getMyAttendees = async (req, res) => {
     const totalCount = await Booking.countDocuments(query)
 
     let bookings = await Booking.find(query)
-      .populate('userId',  'name email createdAt')   // only safe read fields
+      .populate('userId',  'name email createdAt')
       .populate('eventId', 'title date location status')
       .sort({ bookedAt: -1 })
       .skip(skip)
       .limit(limit)
       .lean()
 
-    // 4️⃣  Optional name/email search (post-DB filter on small pages)
+    // Post-populate search
     if (search && search.trim()) {
       const s = search.trim().toLowerCase()
       bookings = bookings.filter(b =>
-        b.userId?.name?.toLowerCase().includes(s) ||
+        b.userId?.name?.toLowerCase().includes(s)  ||
         b.userId?.email?.toLowerCase().includes(s) ||
         b.ticketId?.toLowerCase().includes(s)
       )
     }
 
     res.status(200).json({
-      success: true,
-      count:   totalCount,
+      success:   true,
+      count:     totalCount,
       attendees: bookings.map(b => ({
-        bookingId:   b._id,
-        ticketId:    b.ticketId,
-        status:      b.status,
-        quantity:    b.quantity,
-        bookedAt:    b.bookedAt,
+        bookingId: b._id,
+        ticketId:  b.ticketId,
+        status:    b.status,
+        quantity:  b.quantity,
+        bookedAt:  b.bookedAt,
         user: b.userId ? {
           id:    b.userId._id,
           name:  b.userId.name,
@@ -200,7 +175,7 @@ exports.getMyAttendees = async (req, res) => {
           status:   b.eventId.status
         } : null
       })),
-      events: myEvents,   // for the filter dropdown
+      events: myEvents,
       pagination: {
         total: totalCount,
         page,

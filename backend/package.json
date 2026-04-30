@@ -1,4 +1,18 @@
 {
+  "name": "eventhub-backend",
+  "version": "1.0.0",
+  "description": "TCS iON Smart Event Booking System — REST API",
+  "author": "Amarnath T V <github.com/am6nath>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/am6nath/smart-event-booking"
+  },
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "compression": "^1.8.1",
@@ -14,9 +28,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.0"
-  },
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
   }
 }

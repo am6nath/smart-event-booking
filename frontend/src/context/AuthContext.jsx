@@ -1,7 +1,7 @@
 // src/context/AuthContext.jsx
 import { createContext, useState, useEffect, useContext } from 'react';
 import api from '../services/axios';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const AuthContext = createContext();
 
@@ -95,13 +95,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout user — uses href to fully clear React state tree cleanly
   const logout = () => {
     clearAuth();
-    toast.info('Logged out successfully', {
-      className: 'bg-paper border-2 border-forest-700/30 !shadow-paper text-ink-900 font-sans font-bold text-xs'
-    });
-    window.location.href = '/';
+    toast.success('Logged out successfully');
+    window.location.href = '/events';
   };
 
   // Refresh user profile from backend
