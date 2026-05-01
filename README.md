@@ -615,18 +615,68 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## 📸 Screenshots
 
-> Start the application and log in with each role to explore the full experience.
+> All screenshots captured from the live application. Run `node seed.js` in the `backend/` directory first to populate sample data.
 
-| Screen | Route |
-|---|---|
-| Event Discovery | `/events` |
-| Event Detail + Reviews | `/events/:id` |
-| Booking Confirmation | `/booking/:id` |
-| My Bookings + Ticket | `/bookings` |
-| User Dashboard | `/dashboard/user` |
-| Organizer Dashboard | `/dashboard/organizer` |
-| Admin Dashboard (Analytics) | `/dashboard/admin` |
-| Organizer Public Profile | `/organizers/:id` |
+---
+
+### 🔐 Authentication
+
+| Login | Register |
+|:---:|:---:|
+| ![Login Page](./docs/screenshots/login.png) | ![Register Page](./docs/screenshots/register.png) |
+| JWT-based login with role-aware redirect | Role selection (User / Organizer / Admin) |
+
+---
+
+### 🏠 Home & Event Discovery
+
+**Home Page — Authenticated Landing**
+![Home Page](./docs/screenshots/home_page.png)
+
+**Browse Events — Filterable Grid**
+![Events Browse](./docs/screenshots/events_browse.png)
+> Paginated event cards with search, category, location, date-range, price & rating filters.
+
+**Event Detail + Reviews**
+![Event Detail](./docs/screenshots/event_detail.png)
+> Full event info — seats, price, organizer link, booking CTA, and community reviews with star ratings.
+
+---
+
+### 👤 User Role
+
+| User Dashboard | My Bookings |
+|:---:|:---:|
+| ![User Dashboard](./docs/screenshots/user_dashboard.png) | ![My Bookings](./docs/screenshots/my_bookings.png) |
+| Upcoming bookings & quick actions | Booking list with ticket IDs & cancel option |
+
+**Booking Detail — Digital Ticket**
+![Booking Detail](./docs/screenshots/booking_detail.png)
+> Digital ticket card: event name, date, admissions count, total price, unique `TKT-*` identifier (DM Mono font), and ENGRAVE (Print) action.
+
+**Profile & Account Settings**
+![Profile](./docs/screenshots/profile.png)
+
+---
+
+### 🗂️ Organizer Role
+
+| Organizer Dashboard | Create Event |
+|:---:|:---:|
+| ![Organizer Dashboard](./docs/screenshots/organizer_dashboard.png) | ![Create Event](./docs/screenshots/create_event.png) |
+| Event stats, occupancy, revenue & attendee view | Dual-mode image upload (URL or file), full form |
+
+---
+
+### 👑 Admin Role
+
+**Admin Dashboard — Analytics & KPIs**
+![Admin Dashboard](./docs/screenshots/admin_dashboard.png)
+> Real-time KPI cards, Recharts line chart (Monthly Traffic vs Sales) & pie chart (Bookings by Category).
+
+**Admin User Management**
+![Admin Users Table](./docs/screenshots/admin_users_table.png)
+> Full user management: create, edit role, delete with cascade. Also covers event approval and booking oversight.
 
 ---
 
