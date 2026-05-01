@@ -42,9 +42,18 @@ exports.getEvents = async (req, res) => {
     // Role-aware filtering
     if (req.user?.role === 'organizer') {
       delete query.status
-      query.$or = [{ status: 'approved' }, { organizerId: req.user.id }]
+      
+      const roleCondition = [{ status: 'approved' }, { organizerId: req.user.id }]
+      if (query.$or) {
+        query.$and = [{ $or: query.$or }, { $or: roleCondition }]
+        delete query.$or
+      } else {
+        query.$or = roleCondition
+      }
+
       if (status && ['draft','pending','approved','rejected','cancelled','completed'].includes(status)) {
         delete query.$or
+        delete query.$and // Clear the role/search conditions if a specific status is requested for their own events
         query.status      = status
         query.organizerId = req.user.id
       }

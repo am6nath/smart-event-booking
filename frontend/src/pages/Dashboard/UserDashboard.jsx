@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../services/axios';
 import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 const UserDashboard = () => {
   const { user } = useAuth();

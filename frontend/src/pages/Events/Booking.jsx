@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import api from '../../services/axios';
 import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 const fmt = (d) =>
   new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -48,8 +48,8 @@ const Booking = () => {
 
   const handleConfirm = async () => {
     if (!event || submitting) return;
-    if (quantity < 1 || quantity > 10) { toast.warning('Between 1–10 tickets only.'); return; }
-    if (quantity > event.availableSeats) { toast.warning('Not enough seats.'); return; }
+    if (quantity < 1 || quantity > 10) { toast.error('Between 1–10 tickets only.'); return; }
+    if (quantity > event.availableSeats) { toast.error('Not enough seats.'); return; }
 
     setSubmitting(true);
     try {

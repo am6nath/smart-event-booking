@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import eventApi from '../../services/eventApi'; 
 import api from '../../services/axios';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 const CATEGORIES = [
   'conference', 'workshop', 'concert', 'sports',

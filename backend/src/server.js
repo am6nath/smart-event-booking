@@ -104,14 +104,15 @@ connectDB().then(() => {
     if (err.code === 'EADDRINUSE') {
       console.error(
         `\n❌ Port ${PORT} is already in use.\n` +
-        `   Run this to free it:\n` +
-        `   npx kill-port ${PORT}\n` +
-        `   Then restart: npm run dev\n`
+        `   Run: npx kill-port ${PORT}\n` +
+        `   Then save any file to trigger nodemon restart, or run: npm run dev\n`
       );
-      process.exit(1);
+      // Exit code 0 → nodemon waits for file change instead of crash-looping
+      process.exit(0);
     } else {
       console.error('Server error:', err);
       process.exit(1);
     }
   });
-});
+});
+

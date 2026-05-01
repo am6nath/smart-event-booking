@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/axios';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import {
   LayoutDashboard, Users, Calendar, Ticket, Settings, 
   Search, Bell, Menu, CloudDownload, 

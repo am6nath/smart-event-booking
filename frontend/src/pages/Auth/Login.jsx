@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import { motion } from 'framer-motion'
 
 // Demo credentials for TCS evaluation (remove before production)
@@ -33,11 +33,7 @@ const Login = () => {
 
   const fill = (cred) => {
     setForm({ email: cred.email, password: cred.password })
-    toast.success(`${cred.role} credentials loaded`, { 
-      icon: '🔐', 
-      autoClose: 2000,
-      className: 'bg-paper border-2 border-forest-700 !shadow-paper text-ink-900 font-serif italic text-sm'
-    })
+    toast.success(`${cred.role} credentials loaded`)
   }
 
   const handleSubmit = async (e) => {
@@ -62,9 +58,7 @@ const Login = () => {
       const msg = err.response?.status === 429 
         ? "Too many attempts. Please wait 15 minutes." 
         : err.response?.data?.message || 'Authentication failed.'
-      toast.error(msg, {
-        className: 'bg-red-50 border-2 border-red-200 !shadow-paper text-red-900 font-sans font-bold text-xs'
-      })
+      toast.error(msg)
     } finally {
       setLoading(false)
     }

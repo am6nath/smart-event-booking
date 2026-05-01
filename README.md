@@ -45,15 +45,13 @@ EventHub is a production-ready event booking web application built on the MERN s
 
 ## 🔑 Live Demo & Test Credentials
 
-Start the backend and frontend (see [Getting Started](#-getting-started)), then use these pre-seeded accounts:
+Start the backend and frontend (see [Getting Started](#-getting-started)), then use these pre-registered accounts to explore the different dashboards:
 
 | Role | Email | Password |
 |---|---|---|
-| **Admin** | `admin@eventbooking.com` | `Admin123` |
-| **Organizer** | `organizer@eventbooking.com` | `org123` |
-| **User** | `amar@event.com` | `Amar123` |
-
-> Run `node seed.js` inside the `backend/` directory to populate the database with these accounts and sample events.
+| **Admin** | `admin@tcs.com` | `admin123` |
+| **Organizer** | `org@tcs.com` | `org123` |
+| **User** | `user@tcs.com` | `user123` |
 
 ---
 

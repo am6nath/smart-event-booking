@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import api from '../../services/axios';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
 const CATEGORIES = [
@@ -55,7 +55,7 @@ const EditEvent = () => {
           imageUrl: ev.imageUrl || ''
         });
       } catch {
-        toast.error('Could not load event', { className: 'bg-red-50 border-2 border-red-200 !shadow-paper text-red-900 font-sans font-bold text-xs' });
+        toast.error('Could not load event');
         navigate('/dashboard/organizer');
       } finally {
         setLoading(false);
@@ -82,9 +82,9 @@ const EditEvent = () => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setForm((prev) => ({ ...prev, imageUrl: res.data.url }));
-      toast.success('Image uploaded successfully', { className: 'bg-forest-50 border-2 border-forest-200 !shadow-paper text-forest-900 font-sans font-bold text-xs' });
+      toast.success('Image uploaded successfully');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Image upload failed', { className: 'bg-red-50 border-2 border-red-200 !shadow-paper text-red-900 font-sans font-bold text-xs' });
+      toast.error(err.response?.data?.message || 'Image upload failed');
     } finally {
       setUploading(false);
     }
@@ -95,7 +95,7 @@ const EditEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLocked) {
-      toast.error('Approved events cannot be edited by organizers without an approved request.', { className: 'bg-amber-50 border-2 border-amber-200 !shadow-paper text-amber-900 font-sans font-bold text-xs' });
+      toast.error('Approved events cannot be edited by organizers without an approved request.');
       return;
     }
     setSaving(true);
@@ -111,10 +111,10 @@ const EditEvent = () => {
         category: form.category,
         imageUrl: form.imageUrl.trim() || ''
       });
-      toast.success('Event updated — resubmitted as pending', { className: 'bg-forest-50 border-2 border-forest-200 !shadow-paper text-forest-900 font-sans font-bold text-xs' });
+      toast.success('Event updated — resubmitted as pending');
       navigate('/dashboard/organizer');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Update failed', { className: 'bg-red-50 border-2 border-red-200 !shadow-paper text-red-900 font-sans font-bold text-xs' });
+      toast.error(err.response?.data?.message || 'Update failed');
     } finally {
       setSaving(false);
     }

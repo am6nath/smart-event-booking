@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/axios';
 import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 const BookingDetail = () => {
   const { id } = useParams();
@@ -40,10 +40,10 @@ const BookingDetail = () => {
     if (!window.confirm('Cancel this booking?')) return;
     try {
       await api.put(`/bookings/${id}/cancel`);
-      toast.success('Booking cancelled successfully', { className: 'bg-forest-50 border-2 border-forest-200 !shadow-paper text-forest-900 font-sans font-bold text-xs' });
+      toast.success('Booking cancelled successfully');
       navigate('/events');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to cancel booking', { className: 'bg-red-50 border-2 border-red-200 !shadow-paper text-red-900 font-sans font-bold text-xs' });
+      toast.error(err.response?.data?.message || 'Failed to cancel booking');
     }
   };
 
